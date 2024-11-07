@@ -67,3 +67,67 @@ def draw_pause_screen(screen):
 
     screen.blit(pause_text, [160, 110])
     pygame.display.flip()
+
+
+
+####Sửa lại phần __init__
+while not done:
+    if game.state == "start_screen":
+        draw_start_screen(screen, game.high_score)  # Vẽ màn hình chào
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                done = True
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_s:
+                    game.state = "playing"
+                    game.score = 0  # Đặt lại điểm số
+                    game.reset_field()  # Khởi tạo lại trường chơi
+                    game.new_figure()  # Tạo hình khối mới
+    elif game.state == "paused":
+        draw_pause_screen(screen)  # Vẽ màn hình tạm dừng
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                done = True
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_p:
+                    game.state = "playing" 
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                if button_rect_resume.collidepoint(event.pos):
+                    button_resume_pressed = True
+                elif button_rect_restart.collidepoint(event.pos):
+                    button_restart_pressed = True
+                elif button_rect_quit.collidepoint(event.pos):
+                    button_quit_pressed = True
+            elif event.type == pygame.MOUSEBUTTONUP:
+                if button_resume_pressed:
+                    if button_rect_resume.collidepoint(event.pos):
+                        game.state = "playing"
+                    button_resume_pressed = False
+                elif button_restart_pressed:
+                    if button_rect_restart.collidepoint(event.pos):
+                        game.reset()
+                    button_restart_pressed = False
+                elif button_quit_pressed:
+                    if button_rect_quit.collidepoint(event.pos):
+                        game.state = "start_screen"
+                    button_quit_pressed = False
+
+####
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                done = True
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_UP:
+                    game.rotate()
+                if event.key == pygame.K_DOWN:
+                    pressing_down = True
+                if event.key == pygame.K_LEFT:
+                    game.go_side(-1)
+                if event.key == pygame.K_RIGHT:
+                    game.go_side(1)
+                if event.key == pygame.K_SPACE:
+                    game.go_space()
+                if event.key == pygame.K_p:  # Phím P để tạm dừng
+                    game.state = "paused"
+                if event.key == pygame.K_ESCAPE:
+                    game.state = "start_screen"  
