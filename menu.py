@@ -258,7 +258,7 @@ def main():
                 counter = 0
 
             if counter % (fps // game.level // 2) == 0 or pressing_down:
-                if game.state == "playing" and not game.paused:
+                if game.state == "playing" :
                     game.go_down()
 
             for event in pygame.event.get():
