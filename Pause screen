@@ -1,3 +1,5 @@
+# Hàm vẽ màn hình tạm dừng
+## ĐỊNH NGHĨA MÀU
 WHITE = (255, 255, 255)
 GRAY = (200, 200, 200)
 BORDER_COLOR = (179, 204, 255)
@@ -36,7 +38,7 @@ button_quit_pressed = False
 button_color = OXFORD_BLUE
 
 def draw_pause_screen(screen):
-
+    mouse_pos = pygame.mouse.get_pos()
     main_window.blit(gray_surface, (0, 0))
     main_window.blit(border_surface, (80 - border_thickness, 100 - border_thickness))  # Vẽ viền
     main_window.blit(small_window_surface, (80, 100))
@@ -49,28 +51,45 @@ def draw_pause_screen(screen):
     quit_color = (196, 226, 255) if button_quit_pressed else button_color
 #Vẽ button RESUME
     pygame.draw.rect(screen, resume_color, button_rect_resume)
-    button_text_surface_resume = font2.render("RESUME", True, WHITE)
-    text_rect_resume = button_text_surface_resume.get_rect(center=button_rect_resume.center)
+    ###
+    if button_rect_resume.collidepoint(mouse_pos):
+        pygame.draw.rect(screen,resume_color , button_rect_resume.inflate(10, 10))
+        button_text_surface_resume = font2.render("RESUME", True, (255,255,255))
+        text_rect_resume = button_text_surface_resume.get_rect(center=button_rect_resume.center)
+    else:
+        pygame.draw.rect(screen, resume_color, button_rect_resume)
+        button_text_surface_resume = font2.render("RESUME", True, (255,255,255))
+        text_rect_resume = button_text_surface_resume.get_rect(center=button_rect_resume.center)
     screen.blit(button_text_surface_resume, text_rect_resume)
 #Draw button RESTART
     pygame.draw.rect(screen, restart_color, button_rect_restart)
-    button_text_surface_restart = font2.render("RESTART", True, WHITE)
-    text_rect_restart = button_text_surface_restart.get_rect(center=button_rect_restart.center)
+    if button_rect_restart.collidepoint(mouse_pos):
+        pygame.draw.rect(screen,restart_color , button_rect_restart.inflate(10, 10))
+        button_text_surface_restart = font2.render("RESTART", True, (255,255,255))
+        text_rect_restart = button_text_surface_restart.get_rect(center=button_rect_restart.center)
+    else:
+        pygame.draw.rect(screen, restart_color, button_rect_restart)
+        button_text_surface_restart = font2.render("RESTART", True, (255,255,255))
+        text_rect_restart = button_text_surface_restart.get_rect(center=button_rect_restart.center)    
     screen.blit(button_text_surface_restart, text_rect_restart)
 #Button QUIT
     pygame.draw.rect(screen, quit_color, button_rect_quit)
-    button_text_surface_quit = font2.render("QUIT", True, WHITE)
-    text_rect_quit = button_text_surface_quit.get_rect(center=button_rect_quit.center)
+    if button_rect_quit.collidepoint(mouse_pos):
+        pygame.draw.rect(screen,quit_color , button_rect_quit.inflate(10, 10))
+        button_text_surface_quit = font2.render("QUIT", True, (255,255,255))
+        text_rect_quit = button_text_surface_quit.get_rect(center=button_rect_quit.center)
+    else:
+        pygame.draw.rect(screen, quit_color, button_rect_quit)
+        button_text_surface_quit = font2.render("QUIT", True, (255,255,255))
+        text_rect_quit = button_text_surface_quit.get_rect(center=button_rect_quit.center)  
     screen.blit(button_text_surface_quit, text_rect_quit)
 #Draw PAUSED
     pause_text = font1.render("PAUSED", True, OXFORD_BLUE)
-
     screen.blit(pause_text, [160, 110])
+
     pygame.display.flip()
-
-
-
-####Sửa lại phần __init__
+############################
+####VÒNG LẶP WHILE:
 while not done:
     if game.state == "start_screen":
         draw_start_screen(screen, game.high_score)  # Vẽ màn hình chào
@@ -105,14 +124,25 @@ while not done:
                     button_resume_pressed = False
                 elif button_restart_pressed:
                     if button_rect_restart.collidepoint(event.pos):
-                        game.reset()
+                        # game.reset()
+                        game.__init__(20,10)
+
                     button_restart_pressed = False
                 elif button_quit_pressed:
                     if button_rect_quit.collidepoint(event.pos):
                         game.state = "start_screen"
                     button_quit_pressed = False
+    else:
+        if game.figure is None:
+            game.new_figure()
+        counter += 1
+        if counter > 100000:
+            counter = 0
 
-####
+        if counter % (fps // game.level // 2) == 0 or pressing_down:
+            if game.state == "playing" and not game.paused:
+                game.go_down()
+
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 done = True
@@ -130,4 +160,9 @@ while not done:
                 if event.key == pygame.K_p:  # Phím P để tạm dừng
                     game.state = "paused"
                 if event.key == pygame.K_ESCAPE:
-                    game.state = "start_screen"  
+                    game.state = "start_screen"  # Quay lại màn hình chào
+
+            if event.type == pygame.KEYUP:
+                if event.key == pygame.K_DOWN:
+                    pressing_down = False
+
