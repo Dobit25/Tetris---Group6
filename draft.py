@@ -175,10 +175,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-    # with open('player_data.json', 'r') as file:
-    #     data = json.load(file)
-
-    # # Lấy điểm từ dictionary đầu tiên
-    # first_player_score = data[0]['Score']
-
-    # print(first_player_score)
