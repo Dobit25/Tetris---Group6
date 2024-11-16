@@ -103,7 +103,29 @@ def main():
                             pressing_down = False
                             game_over = False
                         elif ranking_button.collidepoint(event.pos):
-                            draw_ranking_screen(screen)
+                            game.state = "ranking"
+                            game.score = 0
+                            game.lines_cleared = 0
+                            game.reset_field()
+                            game.new_figure()
+                            pressing_down = False
+                            game_over = False
+                            
+        elif game.state == "ranking":
+            restart_button_rect, end_button_rect = draw_ranking_screen(screen)
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    done = True
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    if restart_button_rect.collidepoint(event.pos):
+                        game.state = "name_input"
+                        player_name = ""
+                    elif end_button_rect.collidepoint(event.pos):
+                        done = True  # Exit the game
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_RETURN or event.key == pygame.K_ESCAPE:
+                        game.state = "start_screen"
+                        
         else:
             if game.figure is None:
                 game.new_figure()
