@@ -74,22 +74,29 @@ def main():
         # ... (rest of the code remains unchanged)
         
         elif game.state == "name_input":
-            # input_box = draw_name_input_screen(screen, player_name)
-            draw_name_input_screen(screen, player_name)
+            input_box, submit_button_rect = draw_name_input_screen(screen, player_name)
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     done = True
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_RETURN:
                         game.state = "playing"
-                        game.score = 0  # Đặt lại điểm số
-                        game.reset_field()  # Khởi tạo lại trường chơi
-                        game.new_figure()  # Tạo hình khối mới
-                        # input_active = False
+                        game.score = 0  # Reset score
+                        game.reset_field()  # Reset field
+                        game.new_figure()  # Create new figure
                     elif event.key == pygame.K_BACKSPACE:
                         player_name = player_name[:-1]
                     else:
                         player_name += event.unicode
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    if submit_button_rect.collidepoint(event.pos):
+                        game.state = "playing"
+                        game.score = 0  # Reset score
+                        game.reset_field()  # Reset field
+                        game.new_figure()  # Create new figure
+
+        # ... (rest of the code remains unchanged)
+
 
         elif game.state == "paused":
             # Truyền từ điển trạng thái vào hàm nhỏ
