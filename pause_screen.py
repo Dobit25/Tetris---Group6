@@ -72,13 +72,13 @@ button_rect_resume = pygame.Rect(155, 170, 100, 50)
 button_rect_restart = pygame.Rect(155, 240, 100, 50)  # Vị trí và kích thước của button
 button_rect_menu = pygame.Rect(155, 310, 100, 50)
 
-button_resume_pressed = False
-button_restart_pressed = False
-button_menu_pressed = False
+# button_resume_pressed = False
+# button_restart_pressed = False
+# button_menu_pressed = False
 
 button_color = OXFORD_BLUE
 
-def draw_pause_screen(screen):
+def draw_pause_screen(screen, button_states):
     mouse_pos = pygame.mouse.get_pos()
     main_window.blit(gray_surface, (0, 0))
     main_window.blit(border_surface, (80 - border_thickness, 100 - border_thickness))  # Vẽ viền
@@ -87,9 +87,9 @@ def draw_pause_screen(screen):
     font1 = pygame.font.SysFont('Calibri', 30, True, False)
     font2 = pygame.font.SysFont('Calibri', 20, True, False)
 
-    resume_color = (196, 226, 255) if button_resume_pressed else button_color
-    restart_color = (196, 226, 255) if button_restart_pressed else button_color
-    menu_color = (196, 226, 255) if button_menu_pressed else button_color
+    resume_color = (196, 226, 255) if button_states["button_resume_pressed"] else button_color
+    restart_color = (196, 226, 255) if button_states["button_restart_pressed"] else button_color
+    menu_color = (196, 226, 255) if button_states["button_menu_pressed"] else button_color
 
     # Vẽ button RESUME
     pygame.draw.rect(screen, resume_color, button_rect_resume)
