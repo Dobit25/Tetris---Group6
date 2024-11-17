@@ -122,7 +122,6 @@ def main():
                     elif button_states["button_restart_pressed"]:
                         if button_rect_restart.collidepoint(event.pos):
                             game.score = 0
-                            game.lines_cleared = 0
                             game.reset_field()
                             game.new_figure()
                             game.state = "playing"
@@ -138,7 +137,7 @@ def main():
                 data = json.load(file)
             highest_score = data[0]['Score']
 
-            restart_button, menu_button, ranking_button = draw_game_over_popup(screen, game.score, game.lines_cleared, highest_score, game.top_scores)
+            restart_button, menu_button, ranking_button = draw_game_over_popup(screen, game.score, highest_score)
             game_over = True
             while game_over:
                 for event in pygame.event.get():
@@ -150,7 +149,6 @@ def main():
                         if restart_button.collidepoint(event.pos):
                             game.state = "playing"
                             game.score = 0
-                            game.lines_cleared = 0
                             game.reset_field()
                             game.new_figure()
                             pressing_down = False
@@ -158,7 +156,6 @@ def main():
                         elif menu_button.collidepoint(event.pos):
                             game.state = "start_screen"
                             game.score = 0
-                            game.lines_cleared = 0
                             game.reset_field()
                             game.new_figure()
                             pressing_down = False
@@ -167,7 +164,6 @@ def main():
                         elif ranking_button.collidepoint(event.pos):
                             game.state = "ranking"
                             game.score = 0
-                            game.lines_cleared = 0
                             game.reset_field()
                             game.new_figure()
                             pressing_down = False
