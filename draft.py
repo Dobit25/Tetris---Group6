@@ -130,7 +130,6 @@ def main():
             with open('player_data.json', 'r') as file:
                 data = json.load(file)
             highest_score = data[0]['Score']
-            print(highest_score)
 
             restart_button, menu_button, ranking_button = draw_game_over_popup(screen, game.score, game.lines_cleared, highest_score, game.top_scores)
             game_over = True
@@ -188,9 +187,7 @@ def main():
             if counter > 100000:
                 counter = 0
 
-            if counter % (fps // game.level // 2) == 0 or pressing_down:
-                if game.state == "playing" :
-                    game.go_down()
+            game.falling_speed(counter, fps, pressing_down)
 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -231,3 +228,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+    
