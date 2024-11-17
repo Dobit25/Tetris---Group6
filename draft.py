@@ -168,6 +168,7 @@ def main():
                     pressing_down = False
 
             draw_game_screen(screen, game, gameplay_bg)
+            draw_pause_button(screen)
 
         pygame.display.flip() 
         clock.tick(fps)  
