@@ -4,7 +4,7 @@ from tetris_gameplay_operation import Tetris
 from data_scores import load_scores, save_score, draw_ranking_screen
 from start_screen import draw_start_screen, draw_name_input_screen
 from gameplay_screen import draw_game_screen
-from pause_screen import draw_pause_screen
+from pause_screen import draw_pause_screen, draw_pause_button
 from ending_screen import draw_game_over_popup
 from backgrounds_and_sound import sound, menu_bg, gameplay_bg
 
