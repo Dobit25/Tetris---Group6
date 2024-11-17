@@ -1,10 +1,13 @@
 import pygame
 import os
+
 os.chdir(os.path.dirname(__file__))
 menu_bg = pygame.image.load("menu_bg.jpg")
-menu_bg = pygame.transform.scale(menu_bg, (400,500))
+menu_bg = pygame.transform.scale(menu_bg, (400, 500))
 gameplay_bg = pygame.image.load("gameplay_bg.png")
-gameplay_bg = pygame.transform.scale(gameplay_bg, (400,500))
+gameplay_bg = pygame.transform.scale(gameplay_bg, (400, 500))
+
+is_muted = False  # Global variable to track mute state
 
 def sound():
     pygame.mixer.init()
@@ -12,3 +15,12 @@ def sound():
     pygame.mixer.music.play(-1)
     pygame.mixer.music.set_volume(0.7)
     return pygame.mixer.music
+
+def toggle_mute():
+    global is_muted
+    if is_muted:
+        pygame.mixer.music.set_volume(0.7)
+        is_muted = False
+    else:
+        pygame.mixer.music.set_volume(0.0)
+        is_muted = True
