@@ -57,18 +57,35 @@ def main():
                         player_name += event.unicode
 
         elif game.state == "paused":
-            resume_button_rect, restart_button_rect, quit_button_rect = draw_pause_screen(screen)
+            button_rect_resume, button_rect_restart, button_rect_menu, button_resume_pressed, button_restart_pressed, button_menu_pressed = draw_pause_screen(screen)
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     done = True
-                if event.type == pygame.MOUSEBUTTONDOWN:
-                    if resume_button_rect.collidepoint(event.pos):
-                        game.state = "playing"  # Tiếp tục trò chơi
-                    elif restart_button_rect.collidepoint(event.pos):
-                        game.state = "name_input"  # Restart the game
-                        player_name = ""
-                    elif quit_button_rect.collidepoint(event.pos):
-                        done = True  # Quit the game
+
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_p:
+                        game.state = "playing"
+
+                elif event.type == pygame.MOUSEBUTTONDOWN:
+                    if button_rect_resume.collidepoint(event.pos):
+                        button_resume_pressed = True
+                    elif button_rect_restart.collidepoint(event.pos):
+                        button_restart_pressed = True
+                    elif button_rect_menu.collidepoint(event.pos):
+                        button_menu_pressed = True
+                elif event.type == pygame.MOUSEBUTTONUP:
+                    if button_resume_pressed:
+                        if button_rect_resume.collidepoint(event.pos):
+                            game.state = "playing"
+                        # button_resume_pressed = False
+                    elif button_restart_pressed:
+                        if button_rect_restart.collidepoint(event.pos):
+                            game.__init__(20,10)  # Restart game
+                        # button_restart_pressed = False
+                    elif button_menu_pressed:
+                        if button_rect_menu.collidepoint(event.pos):
+                            game.state = "start_screen"
+                        # button_menu_pressed = False
 
         elif game.state == "gameover":
             save_score(player_name, game.score)
@@ -128,6 +145,8 @@ def main():
                         game.state = "start_screen"
                         
         else:
+            draw_game_screen(screen, game, gameplay_bg)
+            draw_pause_button(screen)
             if game.figure is None:
                 game.new_figure()
             counter += 1
@@ -162,13 +181,13 @@ def main():
                             pygame.mixer.music.pause()  # Tạm dừng nhạc
                         else:
                             pygame.mixer.music.unpause()  # Tiếp tục phát nhạc       
-                                     
+                    if event.type == pygame.MOUSEBUTTONDOWN:
+                        button_rect_pause = draw_pause_button(screen)
+                        if button_rect_pause.collidepoint(event.pos):  # Kiểm tra vị trí chuột
+                            game.state = "paused"                     # Chuy
             if event.type == pygame.KEYUP:
                 if event.key == pygame.K_DOWN:
                     pressing_down = False
-
-            draw_game_screen(screen, game, gameplay_bg)
-            draw_pause_button(screen)
 
         pygame.display.flip() 
         clock.tick(fps)  
