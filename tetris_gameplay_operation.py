@@ -1,8 +1,9 @@
 from figures import Figure
 class Tetris:
     def __init__(self, height, width):
-        self.level = 1
+        self.level = 0.6
         self.score = 0
+        self.total_lines_cleared = 0
         self.state = "start_screen"  # Trạng thái ban đầu
         self.field = []
         self.height = height
@@ -10,7 +11,6 @@ class Tetris:
         self.x = 100
         self.y = 60
         self.zoom = 20
-        # self.high_score = 0  # Điểm cao nhất
         self.top_scores = []
         self.lines_cleared = 0
         self.figure = None
@@ -37,20 +37,39 @@ class Tetris:
                         intersection = True
         return intersection
 
+
     def break_lines(self):
-        lines = 0
-        for i in range(1, self.height):
-            zeros = 0
-            for j in range(self.width):
-                if self.field[i][j] == 0:
-                    zeros += 1
-            if zeros == 0:
-                lines += 1
-                for i1 in range(i, 1, -1):
-                    for j in range(self.width):
-                        self.field[i1][j] = self.field[i1 - 1][j]
-        self.lines_cleared += lines  # Cập nhật số dòng đã xóa
-        self.score += lines ** 2
+            lines = 0
+            combo = 0
+            for i in range(1, self.height):
+                zeros = 0
+                for j in range(self.width):
+                    if self.field[i][j] == 0:
+                        zeros += 1
+                if zeros == 0:
+                    lines += 1
+                    for i1 in range(i, 1, -1):
+                        for j in range(self.width):
+                            self.field[i1][j] = self.field[i1 - 1][j]
+            if lines > 0:
+                self.total_lines_cleared += lines  # Update total lines cleared
+                if lines == 1:
+                    self.score += 100
+                    combo = 0
+                elif lines >= 2:
+                    combo += 1
+                    if lines == 2:
+                        self.score += 300
+                    elif lines == 3:
+                        self.score += 500
+                    elif lines == 4:
+                        self.score += 800
+                if combo > 1:
+                    self.score += 50 * (combo - 1)
+                if self.level < 2:
+                    if self.total_lines_cleared % 10 == 0:  # Check total lines cleared
+                        self.level += 0.3
+                        print(self.level)
 
     def go_space(self):
         while not self.intersects():
@@ -85,3 +104,8 @@ class Tetris:
         self.figure.rotate()
         if self.intersects():
             self.figure.rotation = old_rotation
+            
+    def falling_speed(self, counter, fps, pressing_down: bool):
+        if counter % (fps // self.level // 2) == 0 or pressing_down:
+            if self.state == "playing" :
+                self.go_down()
