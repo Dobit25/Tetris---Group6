@@ -1,3 +1,4 @@
+import pygame
 ## ĐỊNH NGHĨA MÀU
 WHITE = (255, 255, 255)
 GRAY = (200, 200, 200)
@@ -6,9 +7,13 @@ BUBBLE = (230, 247, 255)
 OXFORD_BLUE = (0, 38, 77)
 GREEN = (0, 255, 0)
 
+
+
 # Vẽ nút PAUSE
 button_rect_pause = pygame.Rect(320, 20, 35, 25)  # Thêm nút dừng
 def draw_pause_button(screen):
+    button_rect_pause = pygame.Rect(320, 20, 35, 25)  # Thêm nút dừng
+
     # Lấy vị trí chuột
     mouse_pos = pygame.mouse.get_pos()
     is_hovered = button_rect_pause.collidepoint(mouse_pos)
@@ -36,7 +41,12 @@ def draw_pause_button(screen):
     pygame.draw.rect(screen, WHITE, (bar_x1, bar_y, bar_width, bar_height))
     # Thanh phải
     pygame.draw.rect(screen, WHITE, (bar_x2, bar_y, bar_width, bar_height))
+    return button_rect_pause
+
     
+
+
+
 ###ĐỊNH NGHĨA MÀN HÌNH TẠM DỪNG
 #Vẽ màn hình tạm dừng
 main_window_size = (400,500)
@@ -80,43 +90,47 @@ def draw_pause_screen(screen):
     resume_color = (196, 226, 255) if button_resume_pressed else button_color
     restart_color = (196, 226, 255) if button_restart_pressed else button_color
     menu_color = (196, 226, 255) if button_menu_pressed else button_color
-#Vẽ button RESUME
+
+    # Vẽ button RESUME
     pygame.draw.rect(screen, resume_color, button_rect_resume)
-    ###
     if button_rect_resume.collidepoint(mouse_pos):
-        pygame.draw.rect(screen,resume_color , button_rect_resume.inflate(10, 10))
-        button_text_surface_resume = font2.render("RESUME", True, (255,255,255))
+        pygame.draw.rect(screen, resume_color, button_rect_resume.inflate(10, 10))
+        button_text_surface_resume = font2.render("RESUME", True, (255, 255, 255))
         text_rect_resume = button_text_surface_resume.get_rect(center=button_rect_resume.center)
     else:
         pygame.draw.rect(screen, resume_color, button_rect_resume)
-        button_text_surface_resume = font2.render("RESUME", True, (255,255,255))
+        button_text_surface_resume = font2.render("RESUME", True, (255, 255, 255))
         text_rect_resume = button_text_surface_resume.get_rect(center=button_rect_resume.center)
     screen.blit(button_text_surface_resume, text_rect_resume)
-#Draw button RESTART
+
+    # Vẽ button RESTART
     pygame.draw.rect(screen, restart_color, button_rect_restart)
     if button_rect_restart.collidepoint(mouse_pos):
-        pygame.draw.rect(screen,restart_color , button_rect_restart.inflate(10, 10))
-        button_text_surface_restart = font2.render("RESTART", True, (255,255,255))
+        pygame.draw.rect(screen, restart_color, button_rect_restart.inflate(10, 10))
+        button_text_surface_restart = font2.render("RESTART", True, (255, 255, 255))
         text_rect_restart = button_text_surface_restart.get_rect(center=button_rect_restart.center)
     else:
         pygame.draw.rect(screen, restart_color, button_rect_restart)
-        button_text_surface_restart = font2.render("RESTART", True, (255,255,255))
-        text_rect_restart = button_text_surface_restart.get_rect(center=button_rect_restart.center)    
+        button_text_surface_restart = font2.render("RESTART", True, (255, 255, 255))
+        text_rect_restart = button_text_surface_restart.get_rect(center=button_rect_restart.center)
     screen.blit(button_text_surface_restart, text_rect_restart)
-#Button MENU
+
+    # Vẽ button MENU
     pygame.draw.rect(screen, menu_color, button_rect_menu)
     if button_rect_menu.collidepoint(mouse_pos):
-        pygame.draw.rect(screen,menu_color , button_rect_menu.inflate(10, 10))
-        button_text_surface_menu = font2.render("MENU", True, (255,255,255))
+        pygame.draw.rect(screen, menu_color, button_rect_menu.inflate(10, 10))
+        button_text_surface_menu = font2.render("MENU", True, (255, 255, 255))
         text_rect_menu = button_text_surface_menu.get_rect(center=button_rect_menu.center)
     else:
         pygame.draw.rect(screen, menu_color, button_rect_menu)
-        button_text_surface_menu = font2.render("MENU", True, (255,255,255))
-        text_rect_menu = button_text_surface_menu.get_rect(center=button_rect_menu.center)  
+        button_text_surface_menu = font2.render("MENU", True, (255, 255, 255))
+        text_rect_menu = button_text_surface_menu.get_rect(center=button_rect_menu.center)
     screen.blit(button_text_surface_menu, text_rect_menu)
-#Draw PAUSED
+
+    # Vẽ PAUSED
     pause_text = font1.render("PAUSED", True, OXFORD_BLUE)
     screen.blit(pause_text, [160, 110])
 
-
     pygame.display.flip()
+
+    return button_rect_resume, button_rect_restart, button_rect_menu, button_resume_pressed, button_restart_pressed, button_menu_pressed
