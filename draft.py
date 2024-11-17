@@ -23,9 +23,14 @@ def main():
     player_name = ""
     # input_active = False
     sound()
-    button_resume_pressed = False
-    button_restart_pressed = False
-    button_menu_pressed = False
+    # button_resume_pressed = False
+    # button_restart_pressed = False
+    # button_menu_pressed = False
+    button_states = {
+    "button_resume_pressed": False,
+    "button_restart_pressed": False,
+    "button_menu_pressed": False
+    }
 
     while not done:
         if pygame.mixer.music.get_busy() == False:
@@ -60,39 +65,38 @@ def main():
                         player_name += event.unicode
 
         elif game.state == "paused":
-            button_rect_resume, button_rect_restart, button_rect_menu= draw_pause_screen(screen)
+            # Truyền từ điển trạng thái vào hàm nhỏ
+            button_rect_resume, button_rect_restart, button_rect_menu = draw_pause_screen(screen, button_states)
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     done = True
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_p:
                         game.state = "playing"
-
                 elif event.type == pygame.MOUSEBUTTONDOWN:
                     if button_rect_resume.collidepoint(event.pos):
-                        button_resume_pressed = True
+                        button_states["button_resume_pressed"] = True
                     elif button_rect_restart.collidepoint(event.pos):
-                        button_restart_pressed = True
+                        button_states["button_restart_pressed"] = True
                     elif button_rect_menu.collidepoint(event.pos):
-                        button_menu_pressed = True
-
+                        button_states["button_menu_pressed"] = True
                 elif event.type == pygame.MOUSEBUTTONUP:
-                    if button_resume_pressed:
+                    if button_states["button_resume_pressed"]:
                         if button_rect_resume.collidepoint(event.pos):
                             game.state = "playing"
-                        button_resume_pressed = False
-                    elif button_restart_pressed:
+                        button_states["button_resume_pressed"] = False
+                    elif button_states["button_restart_pressed"]:
                         if button_rect_restart.collidepoint(event.pos):
-                            game.score = 0  # Đặt lại điểm số
-                            game.lines_cleared = 0  # Đặt lại số dòng đã xóa
-                            game.reset_field()  # Xóa trường chơi
-                            game.new_figure()  # Tạo khối mới
-                            game.state = "playing"  # Restart game
-                        button_restart_pressed = False
-                    elif button_menu_pressed:
+                            game.score = 0
+                            game.lines_cleared = 0
+                            game.reset_field()
+                            game.new_figure()
+                            game.state = "playing"
+                        button_states["button_restart_pressed"] = False
+                    elif button_states["button_menu_pressed"]:
                         if button_rect_menu.collidepoint(event.pos):
                             game.state = "start_screen"
-                        button_menu_pressed = False
+                        button_states["button_menu_pressed"] = False
 
         elif game.state == "gameover":
             save_score(player_name, game.score)
