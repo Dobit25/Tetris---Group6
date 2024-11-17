@@ -11,8 +11,6 @@ class Tetris:
         self.x = 100
         self.y = 60
         self.zoom = 20
-        self.top_scores = []
-        self.lines_cleared = 0
         self.figure = None
 
         self.reset_field()  # Khởi tạo lại trường chơi
@@ -104,7 +102,7 @@ class Tetris:
         self.figure.rotate()
         if self.intersects():
             self.figure.rotation = old_rotation
-            
+
     def falling_speed(self, counter, fps, pressing_down: bool):
         if counter % (fps // self.level // 2) == 0 or pressing_down:
             if self.state == "playing" :
