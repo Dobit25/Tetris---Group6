@@ -1,177 +1,38 @@
-import pygame, json
+import pygame
+def draw_game_over_popup(screen, score, score_line, high_score, top_scores):
+    screen.fill((230, 247, 255))  # Dark background color
+    font_title = pygame.font.SysFont('Calibri', 50, True, False)
+    font = pygame.font.SysFont('Calibri', 28, True, False)
 
-from tetris_gameplay_operation import Tetris
-from data_scores import load_scores, save_score, draw_ranking_screen
-from start_screen import draw_start_screen, draw_name_input_screen
-from gameplay_screen import draw_game_screen
-from pause_screen import draw_pause_screen
-from ending_screen import draw_game_over_popup
-from backgrounds_and_sound import sound, menu_bg, gameplay_bg
+    # Game Over title
+    game_over_text = font_title.render("GAME OVER", True, (0, 38, 77))
+    screen.blit(game_over_text, (screen.get_width() // 2 - game_over_text.get_width() // 2, 50))
 
-def main():
-    pygame.init()
-    size = (400, 500)
-    screen = pygame.display.set_mode(size)
-    pygame.display.set_caption("Tetris")
+    # Display score, high score, and other details
+    score_text = font.render(f"CURRENT SCORE: {score}", True, (0, 38, 77))
+    screen.blit(score_text, (screen.get_width() // 2 - score_text.get_width() // 2, 120))
 
-    done = False
-    clock = pygame.time.Clock()
-    fps = 25
-    game = Tetris(20, 10)
-    counter = 0
-    pressing_down = False
-    player_name = ""
-    # input_active = False
-    sound()
+    high_score_text = font.render(f"HIGHEST SCORE: {high_score}", True, (0, 38, 77))
+    screen.blit(high_score_text, (screen.get_width() // 2 - high_score_text.get_width() // 2, 160))
 
-    while not done:
-        if pygame.mixer.music.get_busy() == False:
-            sound()
 
-        if game.state == "start_screen":
-            button_rect = draw_start_screen(screen, menu_bg)  # Vẽ màn hình chào
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    done = True
-                if event.type == pygame.MOUSEBUTTONDOWN:
-                    if button_rect.collidepoint(event.pos):
-                        game.state = "name_input"
-                        # input_active = True
+    # Draw "Restart" button
+    restart_button = pygame.Rect(screen.get_width() // 2 - 100, 350, 200, 40)
+    pygame.draw.rect(screen, (0, 38, 77), restart_button)  # Blue color for the Restart button
+    restart_text = font.render("RESTART", True, (255, 255, 255))
+    screen.blit(restart_text, (restart_button.x + restart_button.width // 2 - restart_text.get_width() // 2, restart_button.y + 5))
 
-        elif game.state == "name_input":
-            # input_box = draw_name_input_screen(screen, player_name)
-            draw_name_input_screen(screen, player_name)
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    done = True
-                if event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_RETURN:
-                        game.state = "playing"
-                        game.score = 0  # Đặt lại điểm số
-                        game.reset_field()  # Khởi tạo lại trường chơi
-                        game.new_figure()  # Tạo hình khối mới
-                        # input_active = False
-                    elif event.key == pygame.K_BACKSPACE:
-                        player_name = player_name[:-1]
-                    else:
-                        player_name += event.unicode
+    # Draw "Ranking" button above the Restart button
+    ranking_button = pygame.Rect(screen.get_width() // 2 - 100, 290, 200, 40)  # Adjust the y-coordinate as needed
+    pygame.draw.rect(screen, (0, 38, 77), ranking_button)  # Blue color for the Ranking button
+    ranking_text = font.render("RANKING", True, (255, 255, 255))
+    screen.blit(ranking_text, (ranking_button.x + ranking_button.width // 2 - ranking_text.get_width() // 2, ranking_button.y + 5))
 
-        elif game.state == "paused":
-            resume_button_rect, restart_button_rect, quit_button_rect = draw_pause_screen(screen)
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    done = True
-                if event.type == pygame.MOUSEBUTTONDOWN:
-                    if resume_button_rect.collidepoint(event.pos):
-                        game.state = "playing"  # Tiếp tục trò chơi
-                    elif restart_button_rect.collidepoint(event.pos):
-                        game.state = "name_input"  # Restart the game
-                        player_name = ""
-                    elif quit_button_rect.collidepoint(event.pos):
-                        done = True  # Quit the game
+    # Draw "Main Menu" button below the Restart button
+    menu_button = pygame.Rect(screen.get_width() // 2 - 100, 410, 200, 40)
+    pygame.draw.rect(screen, ((0, 38, 77)), menu_button)  # Blue color for the Main Menu button
+    menu_text = font.render("MAIN MENU", True, (255, 255, 255))
+    screen.blit(menu_text, (menu_button.x + menu_button.width // 2 - menu_text.get_width() // 2, menu_button.y + 5))
 
-        elif game.state == "gameover":
-            save_score(player_name, game.score)
-            with open('player_data.json', 'r') as file:
-                data = json.load(file)
-            highest_score = data[0]['Score']
-            print(highest_score)
-
-            restart_button, menu_button, ranking_button = draw_game_over_popup(screen, game.score, game.lines_cleared, highest_score, game.top_scores)
-            game_over = True
-            while game_over:
-                for event in pygame.event.get():
-                    if event.type == pygame.QUIT:
-                        done = True
-                        game_over = False
-                    
-                    if event.type == pygame.MOUSEBUTTONDOWN:
-                        if restart_button.collidepoint(event.pos):
-                            game.state = "playing"
-                            game.score = 0
-                            game.lines_cleared = 0
-                            game.reset_field()
-                            game.new_figure()
-                            pressing_down = False
-                            game_over = False
-                        elif menu_button.collidepoint(event.pos):
-                            game.state = "start_screen"
-                            game.score = 0
-                            game.lines_cleared = 0
-                            game.reset_field()
-                            game.new_figure()
-                            pressing_down = False
-                            game_over = False
-                        elif ranking_button.collidepoint(event.pos):
-                            game.state = "ranking"
-                            game.score = 0
-                            game.lines_cleared = 0
-                            game.reset_field()
-                            game.new_figure()
-                            pressing_down = False
-                            game_over = False
-                            
-        elif game.state == "ranking":
-            restart_button_rect, end_button_rect = draw_ranking_screen(screen)
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    done = True
-                if event.type == pygame.MOUSEBUTTONDOWN:
-                    if restart_button_rect.collidepoint(event.pos):
-                        game.state = "name_input"
-                        player_name = ""
-                    elif end_button_rect.collidepoint(event.pos):
-                        done = True  # Exit the game
-                if event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_RETURN or event.key == pygame.K_ESCAPE:
-                        game.state = "start_screen"
-                        
-        else:
-            if game.figure is None:
-                game.new_figure()
-            counter += 1
-            if counter > 100000:
-                counter = 0
-
-            if counter % (fps // game.level // 2) == 0 or pressing_down:
-                if game.state == "playing" :
-                    game.go_down()
-
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    done = True
-                if event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_UP:
-                        game.rotate()
-                    if event.key == pygame.K_DOWN:
-                        pressing_down = True
-                    if event.key == pygame.K_LEFT:
-                        game.go_side(-1)
-                    if event.key == pygame.K_RIGHT:
-                        game.go_side(1)
-                    if event.key == pygame.K_SPACE:
-                        game.go_space()
-                    if event.key == pygame.K_p:  # Phím P để tạm dừng
-                        game.state = "paused"
-                    if event.key == pygame.K_ESCAPE:
-                        game.state = "start_screen"  # Quay lại màn hình chào
-                        
-                    if event.key == pygame.K_m:  # Kiểm tra nếu phím "M" được nhấn
-                        if pygame.mixer.music.get_busy():  # Kiểm tra nếu nhạc đang chạy
-                            pygame.mixer.music.pause()  # Tạm dừng nhạc
-                        else:
-                            pygame.mixer.music.unpause()  # Tiếp tục phát nhạc       
-                                     
-            if event.type == pygame.KEYUP:
-                if event.key == pygame.K_DOWN:
-                    pressing_down = False
-
-            draw_game_screen(screen, game, gameplay_bg)
-
-        pygame.display.flip() 
-        clock.tick(fps)  
-
-    pygame.quit()
-
-if __name__ == "__main__":
-    main()
+    pygame.display.flip()  # Update the display
+    return restart_button, menu_button, ranking_button
