@@ -46,21 +46,32 @@ def draw_start_screen(screen, background_image):
 
 
 def draw_name_input_screen(screen, player_name):
-    screen.fill((0, 0, 0))  # Màu nền đen
-    font = pygame.font.SysFont('Calibri', 40, True, False)
-    prompt_text = font.render("Enter your name:", True, (255, 255, 255))
-    screen.blit(prompt_text, [50, 100])
+    screen.fill((230, 247, 255))  # Light background color
+    font_title = pygame.font.SysFont('Calibri', 50, True, False)
+    font = pygame.font.SysFont('Calibri', 28, True, False)
+    button_font = pygame.font.SysFont('Calibri', 28, True, False)
+    button_color = (0, 38, 77)  # Blue color
 
-    input_box = pygame.Rect(50, 200, 300, 50)
+    # Title
+    title_text = font_title.render("Enter your name:", True, (0, 38, 77))
+    screen.blit(title_text, (screen.get_width() // 2 - title_text.get_width() // 2, 50))
+
+    # Input box
+    input_box = pygame.Rect(screen.get_width() // 2 - 150, 200, 300, 50)
     pygame.draw.rect(screen, (255, 255, 255), input_box, 2)
 
-    name_text = font.render(player_name, True, (255, 255, 255))
+    name_text = font.render(player_name, True, (0, 38, 77))
     screen.blit(name_text, (input_box.x + 10, input_box.y + 10))
 
-    pygame.display.flip()  # Cập nhật màn hình
+    # Draw "Submit" button
+    submit_button_rect = pygame.Rect(screen.get_width() // 2 - 100, 300, 200, 40)
+    pygame.draw.rect(screen, button_color, submit_button_rect)
+    submit_button_text = button_font.render("Submit", True, (255, 255, 255))
+    screen.blit(submit_button_text, (submit_button_rect.x + submit_button_rect.width // 2 - submit_button_text.get_width() // 2, submit_button_rect.y + 5))
 
-    return input_box
+    pygame.display.flip()  # Update the screen
 
+    return input_box, submit_button_rect
 
 def draw_sound_screen(screen):
     screen.fill((230, 247, 255))  # Light background color
