@@ -133,4 +133,4 @@ def draw_pause_screen(screen):
 
     pygame.display.flip()
 
-    return button_rect_resume, button_rect_restart, button_rect_menu, button_resume_pressed, button_restart_pressed, button_menu_pressed
+    return button_rect_resume, button_rect_restart, button_rect_menu
