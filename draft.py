@@ -102,6 +102,7 @@ def main():
                             game.new_figure()
                             pressing_down = False
                             game_over = False
+                            player_name = ""
                         elif ranking_button.collidepoint(event.pos):
                             game.state = "ranking"
                             game.score = 0
