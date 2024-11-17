@@ -129,6 +129,7 @@ def main():
                     elif button_states["button_menu_pressed"]:
                         if button_rect_menu.collidepoint(event.pos):
                             game.state = "start_screen"
+                            player_name = ""
                         button_states["button_menu_pressed"] = False
 
         elif game.state == "gameover":
