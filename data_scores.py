@@ -31,25 +31,22 @@ def draw_ranking_screen(screen):
     scores = load_scores()
     scores = scores[:10]  # Display top 10 scores
 
-    screen.fill((0, 0, 0))
-    font = pygame.font.SysFont('Calibri', 40, True, False)
-    title_text = font.render("Ranking", True, (255, 255, 255))
-    screen.blit(title_text, [100, 50])
+    screen.fill((230, 247, 255))  # Light background color
+    font_title = pygame.font.SysFont('Calibri', 50, True, False)
+    font = pygame.font.SysFont('Calibri', 28, True, False)
+    button_font = pygame.font.SysFont('Calibri', 28, True, False)
+    title_text = font_title.render("Ranking", True, (0, 38, 77))
+    screen.blit(title_text, (screen.get_width() // 2 - title_text.get_width() // 2, 50))
 
     for index, score in enumerate(scores):
-        rank_text = font.render(f"{index + 1}. {score['Player_name']}: {score['Score']}", True, (255, 255, 255))
-        screen.blit(rank_text, [50, 100 + index * 40])
+        rank_text = font.render(f"{index + 1}. {score['Player_name']}: {score['Score']}", True, (0, 38, 77))
+        screen.blit(rank_text, (50, 120 + index * 40))
 
-    button_color = (0, 255, 0)
-    restart_button_rect = pygame.Rect(50, 450, 150, 50)
-    pygame.draw.rect(screen, button_color, restart_button_rect)
-    restart_button_text = font.render("Restart", True, (0, 0, 0))
-    screen.blit(restart_button_text, (restart_button_rect.x + 10, restart_button_rect.y + 10))
-
-    end_button_rect = pygame.Rect(250, 450, 100, 50)
-    pygame.draw.rect(screen, button_color, end_button_rect)
-    end_button_text = font.render("End", True, (0, 0, 0))
-    screen.blit(end_button_text, (end_button_rect.x + 10, end_button_rect.y + 10))
+    button_color = (0, 38, 77)  # Blue color
+    menu_button_rect = pygame.Rect(screen.get_width() // 2 - 100, screen.get_height() - 60, 200, 40)
+    pygame.draw.rect(screen, button_color, menu_button_rect)
+    menu_button_text = button_font.render("Menu", True, (255, 255, 255))
+    screen.blit(menu_button_text, (menu_button_rect.x + menu_button_rect.width // 2 - menu_button_text.get_width() // 2, menu_button_rect.y + 5))
 
     pygame.display.flip()
-    return restart_button_rect, end_button_rect
+    return menu_button_rect
