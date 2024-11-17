@@ -1,5 +1,5 @@
 import pygame
-def draw_game_over_popup(screen, score, score_line, high_score, top_scores):
+def draw_game_over_popup(screen, score, high_score):
     screen.fill((230, 247, 255))  # Dark background color
     font_title = pygame.font.SysFont('Calibri', 50, True, False)
     font = pygame.font.SysFont('Calibri', 28, True, False)
