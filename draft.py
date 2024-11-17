@@ -6,7 +6,7 @@ from start_screen import draw_start_screen, draw_name_input_screen
 from gameplay_screen import draw_game_screen
 from pause_screen import draw_pause_screen, draw_pause_button
 from ending_screen import draw_game_over_popup
-from backgrounds_and_sound import sound, menu_bg, gameplay_bg
+from backgrounds_and_sound import sound, menu_bg, gameplay_bg, toggle_mute
 
 def main():
     pygame.init()
@@ -37,15 +37,42 @@ def main():
             sound()
 
         if game.state == "start_screen":
-            button_rect = draw_start_screen(screen, menu_bg)  # Vẽ màn hình chào
+            start_button_rect, ranking_button_rect, sound_button_rect, exit_button_rect = draw_start_screen(screen, menu_bg)
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     done = True
                 if event.type == pygame.MOUSEBUTTONDOWN:
-                    if button_rect.collidepoint(event.pos):
+                    if start_button_rect.collidepoint(event.pos):
                         game.state = "name_input"
-                        # input_active = True
+                    elif ranking_button_rect.collidepoint(event.pos):
+                        game.state = "ranking"
+                    elif sound_button_rect.collidepoint(event.pos):
+                        game.state = "sound_change"
+                    elif exit_button_rect.collidepoint(event.pos):
+                        done = True
+                        
+        elif game.state == "sound_change":
+            increase_button_rect, decrease_button_rect, mute_button_rect, back_button_rect = draw_sound_screen(screen)
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    done = True
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    if increase_button_rect.collidepoint(event.pos):
+                        volume = pygame.mixer.music.get_volume()
+                        pygame.mixer.music.set_volume(min(volume + 0.2, 1.0))
+                    elif decrease_button_rect.collidepoint(event.pos):
+                        volume = pygame.mixer.music.get_volume()
+                        pygame.mixer.music.set_volume(max(volume - 0.2, 0.0))
+                    elif mute_button_rect.collidepoint(event.pos):
+                        toggle_mute()
+                    elif back_button_rect.collidepoint(event.pos):
+                        game.state = "start_screen"
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_ESCAPE:
+                        game.state = "start_screen"
 
+        # ... (rest of the code remains unchanged)
+        
         elif game.state == "name_input":
             # input_box = draw_name_input_screen(screen, player_name)
             draw_name_input_screen(screen, player_name)
@@ -141,16 +168,13 @@ def main():
                             game_over = False
                             
         elif game.state == "ranking":
-            restart_button_rect, end_button_rect = draw_ranking_screen(screen)
+            menu_button_rect = draw_ranking_screen(screen)
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     done = True
                 if event.type == pygame.MOUSEBUTTONDOWN:
-                    if restart_button_rect.collidepoint(event.pos):
-                        game.state = "name_input"
-                        player_name = ""
-                    elif end_button_rect.collidepoint(event.pos):
-                        done = True  # Exit the game
+                    if menu_button_rect.collidepoint(event.pos):
+                        game.state = "start_screen"
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_RETURN or event.key == pygame.K_ESCAPE:
                         game.state = "start_screen"
