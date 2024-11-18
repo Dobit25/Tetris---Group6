@@ -16,6 +16,12 @@ def sound():
     pygame.mixer.music.set_volume(0.7)
     return pygame.mixer.music
 
+def sound_effect():
+    pygame.mixer.init()
+    sound_effect_channel = pygame.mixer.Channel(1)
+    sound_effect_channel.set_volume(0.7)
+    sound_effect_channel.play(pygame.mixer.Sound("clear_line_sound.mp3"))
+
 def toggle_mute():
     global is_muted
     if is_muted:
