@@ -1,4 +1,5 @@
 from figures import Figure
+from backgrounds_and_sound import sound_effect
 class Tetris:
     def __init__(self, height, width):
         self.level = 0.6
@@ -46,6 +47,7 @@ class Tetris:
                         zeros += 1
                 if zeros == 0:
                     lines += 1
+                    sound_effect()
                     for i1 in range(i, 1, -1):
                         for j in range(self.width):
                             self.field[i1][j] = self.field[i1 - 1][j]
