@@ -23,9 +23,7 @@ def main():
     player_name = ""
     # input_active = False
     sound()
-    # button_resume_pressed = False
-    # button_restart_pressed = False
-    # button_menu_pressed = False
+    
     button_states = {
     "button_resume_pressed": False,
     "button_restart_pressed": False,
