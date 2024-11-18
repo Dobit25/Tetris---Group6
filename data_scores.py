@@ -33,14 +33,14 @@ def draw_ranking_screen(screen):
 
     screen.fill((230, 247, 255))  # Light background color
     font_title = pygame.font.SysFont('Calibri', 50, True, False)
-    font = pygame.font.SysFont('Calibri', 28, True, False)
+    font = pygame.font.SysFont('Calibri', 20, True, False)  # Changed from 28 to 20
     button_font = pygame.font.SysFont('Calibri', 28, True, False)
     title_text = font_title.render("Ranking", True, (0, 38, 77))
     screen.blit(title_text, (screen.get_width() // 2 - title_text.get_width() // 2, 50))
 
     for index, score in enumerate(scores):
         rank_text = font.render(f"{index + 1}. {score['Player_name']}: {score['Score']}", True, (0, 38, 77))
-        screen.blit(rank_text, (50, 120 + index * 40))
+        screen.blit(rank_text, (50, 120 + index * 30))  # Changed spacing from 40 to 30
 
     button_color = (0, 38, 77)  # Blue color
     menu_button_rect = pygame.Rect(screen.get_width() // 2 - 100, screen.get_height() - 60, 200, 40)
