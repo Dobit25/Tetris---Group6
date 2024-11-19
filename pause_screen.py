@@ -1,5 +1,4 @@
 import pygame
-## ĐỊNH NGHĨA MÀU
 WHITE = (255, 255, 255)
 GRAY = (200, 200, 200)
 BORDER_COLOR = (179, 204, 255)
@@ -7,12 +6,9 @@ BUBBLE = (230, 247, 255)
 OXFORD_BLUE = (0, 38, 77)
 GREEN = (0, 255, 0)
 
-
-
-# Vẽ nút PAUSE
-button_rect_pause = pygame.Rect(320, 20, 35, 25)  # Thêm nút dừng
+button_rect_pause = pygame.Rect(720, 30, 45, 35)  # Moved to top-right
 def draw_pause_button(screen):
-    button_rect_pause = pygame.Rect(320, 20, 35, 25)  # Thêm nút dừng
+    button_rect_pause = pygame.Rect(720, 30, 45, 35)  # Moved to top-right
 
     # Lấy vị trí chuột
     mouse_pos = pygame.mouse.get_pos()
@@ -49,15 +45,18 @@ def draw_pause_button(screen):
 
 ###ĐỊNH NGHĨA MÀN HÌNH TẠM DỪNG
 #Vẽ màn hình tạm dừng
-main_window_size = (400,500)
+main_window_size = (800, 700)  # Updated size
 main_window = pygame.display.set_mode(main_window_size)
 # Kích thước màn hình nhỏ
-small_window_size = (250, 290)
+small_window_size = (400, 450)  # Larger popup
 border_thickness = 5
 # Kích thước bề mặt màu xám
 gray_surface = pygame.Surface(main_window_size)
 gray_surface.fill((230,238,255))  
 gray_surface.set_alpha(7)  # Đặt độ trong suốt
+
+small_window_x = (main_window_size[0] - small_window_size[0]) // 2  # Center horizontally
+small_window_y = (main_window_size[1] - small_window_size[1]) // 2  # Center vertically
 
 small_window_surface = pygame.Surface(small_window_size)
 small_window_surface.fill(BUBBLE)
@@ -68,9 +67,9 @@ border_surface.set_alpha(255)  # Đặt độ trong suốt cho viền
 border_surface.set_alpha(255)
 
 ##BUTTON
-button_rect_resume = pygame.Rect(155, 170, 100, 50)
-button_rect_restart = pygame.Rect(155, 240, 100, 50)  # Vị trí và kích thước của button
-button_rect_menu = pygame.Rect(155, 310, 100, 50)
+button_rect_resume = pygame.Rect(small_window_x + 100, small_window_y + 150, 200, 60)  # Wider and taller buttons
+button_rect_restart = pygame.Rect(small_window_x + 100, small_window_y + 230, 200, 60)
+button_rect_menu = pygame.Rect(small_window_x + 100, small_window_y + 310, 200, 60)
 
 # button_resume_pressed = False
 # button_restart_pressed = False
@@ -81,8 +80,8 @@ button_color = OXFORD_BLUE
 def draw_pause_screen(screen, button_states):
     mouse_pos = pygame.mouse.get_pos()
     main_window.blit(gray_surface, (0, 0))
-    main_window.blit(border_surface, (80 - border_thickness, 100 - border_thickness))  # Vẽ viền
-    main_window.blit(small_window_surface, (80, 100))
+    main_window.blit(border_surface, (small_window_x - border_thickness, small_window_y - border_thickness))  # Vẽ viền
+    main_window.blit(small_window_surface, (small_window_x, small_window_y))
 
     font1 = pygame.font.SysFont('Calibri', 30, True, False)
     font2 = pygame.font.SysFont('Calibri', 20, True, False)
@@ -129,7 +128,7 @@ def draw_pause_screen(screen, button_states):
 
     # Vẽ PAUSED
     pause_text = font1.render("PAUSED", True, OXFORD_BLUE)
-    screen.blit(pause_text, [160, 110])
+    screen.blit(pause_text, [small_window_x + small_window_size[0]//2 - pause_text.get_width()//2, small_window_y + 30])
 
     pygame.display.flip()
 
