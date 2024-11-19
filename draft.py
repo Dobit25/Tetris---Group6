@@ -10,7 +10,7 @@ from backgrounds_and_sound import sound, menu_bg, gameplay_bg, toggle_mute
 
 def main():
     pygame.init()
-    size = (400, 500)
+    size = (800, 700)  # Updated window size
     screen = pygame.display.set_mode(size)
     pygame.display.set_caption("Tetris")
 
@@ -21,7 +21,6 @@ def main():
     counter = 0
     pressing_down = False
     player_name = ""
-    # input_active = False
     sound()
     
     button_states = {
@@ -69,8 +68,6 @@ def main():
                     if event.key == pygame.K_ESCAPE:
                         game.state = "start_screen"
 
-        # ... (rest of the code remains unchanged)
-        
         elif game.state == "name_input":
             input_box, submit_button_rect = draw_name_input_screen(screen, player_name)
             for event in pygame.event.get():
@@ -93,11 +90,8 @@ def main():
                         game.reset_field()  # Reset field
                         game.new_figure()  # Create new figure
 
-        # ... (rest of the code remains unchanged)
-
 
         elif game.state == "paused":
-            # Truyền từ điển trạng thái vào hàm nhỏ
             button_rect_resume, button_rect_restart, button_rect_menu = draw_pause_screen(screen, button_states)
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -230,4 +224,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-    
