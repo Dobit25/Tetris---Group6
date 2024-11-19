@@ -3,9 +3,9 @@ import os
 
 os.chdir(os.path.dirname(__file__))
 menu_bg = pygame.image.load("menu_bg.png")
-menu_bg = pygame.transform.scale(menu_bg, (400, 500))
+menu_bg = pygame.transform.scale(menu_bg, (800, 700))  # Updated size
 gameplay_bg = pygame.image.load("gameplay_bg.png")
-gameplay_bg = pygame.transform.scale(gameplay_bg, (400, 500))
+gameplay_bg = pygame.transform.scale(gameplay_bg, (800, 700))  # Updated size
 
 is_muted = False  # Global variable to track mute state
 
