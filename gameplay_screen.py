@@ -1,8 +1,14 @@
 import pygame
 from figures import colors
+
 def draw_game_screen(screen, game, gameplay_background):
-    gameplay_background = pygame.transform.scale(gameplay_background, (400,500)) #chuyển đổi kích thước ảnh nền để phù hợp với kích thước cửa sổ game
+    gameplay_background = pygame.transform.scale(gameplay_background, (800, 700))
     screen.blit(gameplay_background, [0, 0])
+
+    # Center the game field
+    game.x = 250  # Updated starting x position
+    game.y = 50   # Updated starting y position
+    game.zoom = 30  # Larger block size
 
     for i in range(game.height):
         for j in range(game.width):
@@ -21,6 +27,6 @@ def draw_game_screen(screen, game, gameplay_background):
                                       game.y + game.zoom * (i + game.figure.y) + 1,
                                       game.zoom - 2, game.zoom - 2])
 
-    font = pygame.font.SysFont('Calibri', 25, True, False)
+    font = pygame.font.SysFont('Calibri', 35, True, False)  # Larger font
     text = font.render("Score: " + str(game.score), True, (0, 0, 0))
-    screen.blit(text, [20, 20])  
+    screen.blit(text, [50, 30])
