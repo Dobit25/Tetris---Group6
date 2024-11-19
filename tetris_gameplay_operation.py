@@ -67,7 +67,7 @@ class Tetris:
                 if combo > 1:
                     self.score += 50 * (combo - 1)
                 if self.level < 2:
-                    if self.total_lines_cleared % 10 == 0:  # Check total lines cleared
+                    if self.total_lines_cleared % 10 == 0:  # Check total lines cleareds
                         self.level += 0.3
                         print(self.level)
 
