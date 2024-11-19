@@ -27,6 +27,6 @@ def draw_game_screen(screen, game, gameplay_background):
                                       game.y + game.zoom * (i + game.figure.y) + 1,
                                       game.zoom - 2, game.zoom - 2])
 
-    font = pygame.font.SysFont('Calibri', 35, True, False)  # Larger font
+    font = pygame.font.SysFont('Calibri', 35, True, False)  # Larger fonts
     text = font.render("Score: " + str(game.score), True, (0, 0, 0))
     screen.blit(text, [50, 30])
