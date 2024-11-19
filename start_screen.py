@@ -1,7 +1,7 @@
 import pygame
 
 def draw_start_screen(screen, background_image):
-    screen.blit(background_image, (0, 0))  # Draw the background image
+    screen.blit(background_image, (0, 0))  # Draw the background images
     font = pygame.font.SysFont('Calibri', 40, True, False)
     button_font = pygame.font.SysFont('Calibri', 30, True, False)
     
