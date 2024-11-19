@@ -35,7 +35,7 @@ def draw_game_over_popup(screen, score, high_score):
     screen.blit(ranking_text, (ranking_button.x + ranking_button.width // 2 - ranking_text.get_width() // 2, ranking_button.y + 5))
 
     # Draw "Main Menu" button below the Restart button
-    pygame.draw.rect(screen, ((0, 38, 77)), menu_button)  # Blue color for the Main Menu button
+    pygame.draw.rect(screen, ((0, 38, 77)), menu_button)  # Blue color for the Main Menu buttons
     menu_text = font.render("MAIN MENU", True, (255, 255, 255))
     screen.blit(menu_text, (menu_button.x + menu_button.width // 2 - menu_text.get_width() // 2, menu_button.y + 5))
 
