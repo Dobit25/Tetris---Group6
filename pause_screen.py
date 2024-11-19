@@ -8,7 +8,7 @@ GREEN = (0, 255, 0)
 
 button_rect_pause = pygame.Rect(720, 30, 45, 35)  # Moved to top-right
 def draw_pause_button(screen):
-    button_rect_pause = pygame.Rect(720, 30, 45, 35)  # Moved to top-right
+    button_rect_pause = pygame.Rect(720, 30, 45, 35)  # Moved to top-rights
 
     # Lấy vị trí chuột
     mouse_pos = pygame.mouse.get_pos()
