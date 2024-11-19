@@ -26,7 +26,8 @@ def main():
     button_states = {
     "button_resume_pressed": False,
     "button_restart_pressed": False,
-    "button_menu_pressed": False
+    "button_menu_pressed": False,
+    "button_mute_pressed": False
     }
 
     while not done:
