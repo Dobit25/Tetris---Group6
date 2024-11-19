@@ -49,17 +49,25 @@ def main():
                         done = True
                         
         elif game.state == "sound_change":
-            increase_button_rect, decrease_button_rect, mute_button_rect, back_button_rect = draw_sound_screen(screen)
+            increase_button_rect, decrease_button_rect, mute_button_rect, back_button_rect, volume_bar_rect = draw_sound_screen(screen)
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     done = True
                 if event.type == pygame.MOUSEBUTTONDOWN:
-                    if increase_button_rect.collidepoint(event.pos):
+                    if volume_bar_rect.collidepoint(event.pos):
+                        # Calculate volume based on click position and round to nearest 5%
+                        x = event.pos[0] - volume_bar_rect.x
+                        new_volume = round((x / volume_bar_rect.width) * 20) / 20
+                        new_volume = max(0.0, min(1.0, new_volume))
+                        pygame.mixer.music.set_volume(new_volume)
+                    elif increase_button_rect.collidepoint(event.pos):
                         volume = pygame.mixer.music.get_volume()
-                        pygame.mixer.music.set_volume(min(volume + 0.2, 1.0))
+                        new_volume = min(round((volume + 0.05) * 20) / 20, 1.0)
+                        pygame.mixer.music.set_volume(new_volume)
                     elif decrease_button_rect.collidepoint(event.pos):
                         volume = pygame.mixer.music.get_volume()
-                        pygame.mixer.music.set_volume(max(volume - 0.2, 0.0))
+                        new_volume = max(round((volume - 0.05) * 20) / 20, 0.0)
+                        pygame.mixer.music.set_volume(new_volume)
                     elif mute_button_rect.collidepoint(event.pos):
                         toggle_mute()
                     elif back_button_rect.collidepoint(event.pos):
