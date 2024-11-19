@@ -101,6 +101,7 @@ def main():
 
         elif game.state == "paused":
             button_rect_resume, button_rect_restart, button_rect_menu = draw_pause_screen(screen, button_states)
+            button_rect_mute = draw_mute_button(screen, button_states)
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     done = True
@@ -114,8 +115,14 @@ def main():
                         button_states["button_restart_pressed"] = True
                     elif button_rect_menu.collidepoint(event.pos):
                         button_states["button_menu_pressed"] = True
+                    elif button_rect_mute.collidepoint(event.pos):
+                        button_states["button_mute_pressed"] = True
                 elif event.type == pygame.MOUSEBUTTONUP:
-                    if button_states["button_resume_pressed"]:
+                    if button_states["button_mute_pressed"]:
+                        if button_rect_mute.collidepoint(event.pos):
+                            toggle_mute()
+                        button_states["button_mute_pressed"] = False
+                    elif button_states["button_resume_pressed"]:
                         if button_rect_resume.collidepoint(event.pos):
                             game.state = "playing"
                         button_states["button_resume_pressed"] = False
