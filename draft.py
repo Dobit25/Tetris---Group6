@@ -20,6 +20,10 @@ def main():
     game = Tetris(20, 10)
     counter = 0
     pressing_down = False
+    pressing_left = False
+    pressing_right = False
+    hold_time = 0
+    initial_move_time = 5  # Thời gian để di chuyển nhanh hơn nếu giữ phím (trong số vòng lặp)
     player_name = ""
     sound()
     
@@ -210,9 +214,13 @@ def main():
                     if event.key == pygame.K_DOWN:
                         pressing_down = True
                     if event.key == pygame.K_LEFT:
-                        game.go_side(-1)
+                        pressing_left = True
+                        hold_time = 0  # Reset hold time when key is pressed
+                        game.go_side(-1)  # Move immediately on key press
                     if event.key == pygame.K_RIGHT:
-                        game.go_side(1)
+                        pressing_right = True
+                        hold_time = 0  # Reset hold time when key is pressed
+                        game.go_side(1)  # Move immediately on key press
                     if event.key == pygame.K_SPACE:
                         game.go_space()
                     if event.key == pygame.K_p:  # Phím P để tạm dừng
@@ -224,14 +232,29 @@ def main():
                         if pygame.mixer.music.get_busy():  # Kiểm tra nếu nhạc đang chạy
                             pygame.mixer.music.pause()  # Tạm dừng nhạc
                         else:
-                            pygame.mixer.music.unpause()  # Tiếp tục phát nhạc       
+                            pygame.mixer.music.unpause()  # Tiếp tục phát nhạc    
+                               
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     button_rect_pause = draw_pause_button(screen)
                     if button_rect_pause.collidepoint(event.pos):  # Kiểm tra vị trí chuột
                         game.state = "paused"                     # Chuy
-            if event.type == pygame.KEYUP:
-                if event.key == pygame.K_DOWN:
-                    pressing_down = False
+
+                if event.type == pygame.KEYUP:
+                    if event.key == pygame.K_DOWN:
+                        pressing_down = False
+                    if event.key == pygame.K_LEFT:
+                        pressing_left = False
+                        hold_time = 0  # Reset hold time when key is released
+                    if event.key == pygame.K_RIGHT:
+                        pressing_right = False
+                        hold_time = 0  # Reset hold time when key is released
+            if pressing_left or pressing_right:
+                hold_time += 1  # Increase hold_time when key is held down
+                if hold_time > initial_move_time:
+                    if pressing_left and counter % (fps // game.level // 4) == 0:  # Move quickly
+                        game.go_side(-1)
+                    if pressing_right and counter % (fps // game.level // 4) == 0:  # Move quickly
+                        game.go_side(1)
 
         pygame.display.flip() 
         clock.tick(fps)  
