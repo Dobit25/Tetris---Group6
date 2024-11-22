@@ -1,5 +1,8 @@
 from figures import Figure
-from backgrounds_and_sound import sound_effect
+from backgrounds_and_sound import sound_effect, show_bubbles
+import pygame
+size = (800, 700)  # Updated window size
+screen = pygame.display.set_mode(size)
 class Tetris:
     def __init__(self, height, width):
         self.level = 0.6
@@ -48,6 +51,7 @@ class Tetris:
                 if zeros == 0:
                     lines += 1
                     sound_effect()
+                    show_bubbles(screen)
                     for i1 in range(i, 1, -1):
                         for j in range(self.width):
                             self.field[i1][j] = self.field[i1 - 1][j]
@@ -90,8 +94,6 @@ class Tetris:
                     self.field[i + self.figure.y][j + self.figure.x] = self.figure.color
         self.break_lines()
         self.new_figure()
-        # if self.score > self.high_score:
-        #     self.high_score = self.score  # Update high score here
 
     def go_side(self, dx):
         old_x = self.figure.x
